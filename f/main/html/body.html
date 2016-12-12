@@ -1,0 +1,33 @@
+<html>
+        <head>
+                <style>
+                        p {
+                                color: blue;
+                        }
+
+                        .hidden {
+                                display: none;
+                        }
+
+                        .center {
+                                text-align: center;
+                        }
+                </style>
+        </head>
+        <body>
+                <h1 class='center'>{{daysStr}}</h1>
+                <p class='center'>until {{dateStr}}</p>
+                <script>
+                        var resize = function() {
+                          var height = Math.max(document.body.offsetHeight, document.documentElement.offsetHeight);
+                          window.parent && window.parent.postMessage({height: height}, '*');
+                        };
+
+                        window.addEventListener('DOMContentLoaded', function() {
+
+                          resize();
+                          window.addEventListener('resize', resize);
+                        }
+                </script>
+        </body>
+</html>

@@ -1,12 +1,17 @@
 /* Import dependencies, declare constants */
-let ipRegex = require('ip-regex'),
+const fs = require('fs');
+
+const ipRegex = require('ip-regex'),
     moment = require('moment-timezone'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    Mustache = require('mustache');
 
-let request = Promise.promisifyAll(require('request'));
+const request = Promise.promisifyAll(require('request'));
 
-let GEO_IP_URL = 'http://freegeoip.net/json';
-let MS_PER_DAY = 1000 * 60 * 60 * 24;
+const GEO_IP_URL = 'http://freegeoip.net/json';
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+const htmlTemplate = fs.readFileSync('./f/main/html/body.html').toString();
 
 /**
 * Your function call
@@ -62,6 +67,16 @@ function validateInputs(params) {
     });
 }
 
+function daysStr(daysTil) {
+    let suffix = daysTil == 1 ? 'day' : 'days';
+
+    return `${Number(daysTil).toLocaleString()} ${suffix}`;
+}
+
+function dateStr(destinationDate) {
+    return destinationDate.toDateString();
+}
+
 function generateDisplay(args) {
     let timezoneStr = args.timezone,
         date = args.date;
@@ -71,7 +86,10 @@ function generateDisplay(args) {
 
     let daysTil = Math.ceil((destinationDate - userDate) / MS_PER_DAY);
 
-    return `Days until ${destinationDate.toDateString()}: ${daysTil}`;
+    return Mustache.render(htmlTemplate, {
+        daysStr: daysStr(daysTil),
+        dateStr: dateStr(destinationDate)
+    });
 }
 
 module.exports = (params, callback) => {
