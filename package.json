@@ -1,0 +1,20 @@
+{
+  "name": "daystil",
+  "version": "0.0.1",
+  "description": "Service",
+  "author": "okhwaja <osman.khwaja@gmail.com>",
+  "main": "f/main/index.js",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "ip-regex": "^1.0.3",
+    "moment-timezone": "^0.5.10",
+    "request": "^2.79.0"
+  },
+  "private": true,
+  "stdlib": {
+    "name": "okhwaja/daystil",
+    "defaultFunction": "main",
+    "timeout": 10000,
+    "publish": false
+  }
+}
