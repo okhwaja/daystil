@@ -1,6 +1,7 @@
 /* Import dependencies, declare constants */
-let Promise = require('bluebird'),
-    ipRegex = require('ip-regex');
+let ipRegex = require('ip-regex'),
+    moment = require('moment-timezone'),
+    Promise = require('bluebird');
 
 let request = Promise.promisifyAll(require('request'));
 
@@ -47,35 +48,43 @@ function getTimeZone(remoteAddress) {
     });
 }
 
-module.exports = (params, callback) => {
-    getTimeZone('2601:646:0:3135:a0ed:d0e6:b1f2:1ac7')
-        .then(function(res) {
-            callback(null, res);
-        }).catch(function(err) {
-            callback(err, null);
-        })
+function validateInputs(params) {
+    return Promise.resolve().then(function() {
+        let date = params.kwargs.date;
+
+        if (date == undefined) {
+            throw 'Please specify a date argument';
+        } 
+        if (Date.parse(date) == NaN) {
+            throw `date: ${date} is not valid. Try specifying a date in format: YYYY-MM-DD`;
+        }
+    });
 }
 
-// module.exports = (params, callback) => {
+function generateDisplay(args) {
+    let timezoneStr = args.timezone,
+        date = args.date;
 
-//     let date = params.kwargs.date;
-//     var error;
-//     console.log(params.args, params.kwargs, params.remoteAddress)
+    let userDate = new Date();
+    let destinationDate = moment.tz(date, timezoneStr).toDate();
 
-//     if (date == undefined) {
-//         error = 'Please specify a date argument';
-//     } else if (Date.parse(date) == NaN) {
-//         error = `date: ${date} is not valid. Try specifying a date in format: YYYY-MM-DD`;
-//     }
+    let daysTil = Math.ceil((destinationDate - userDate) / (1000 * 60 * 60 * 24)); // ms in a day
 
-//     if (error) {
-//         return callback(error, null);
-//     }
+    return `Days until ${destinationDate.toDateString()}: ${daysTil}`;
+}
 
-//     let parsedDate = new Date(date),
-//         currentTime = Date.now();
-
-//     let daysTil = Math.ceil((parsedDate - currentTime) / (1000 * 60 * 60 * 24)); // ms in a day
-
-//     callback(null, `Days until ${parsedDate.toDateString()}: ${daysTil}`);
-// };
+module.exports = (params, callback) => {
+    validateInputs(params).then(function() {
+        // should be params.remoteAddress
+        return getTimeZone('2601:646:0:3135:a0ed:d0e6:b1f2:1ac7')
+    }).then(function(timezoneStr) {
+        var args = {};
+        args.timezone = timezoneStr;
+        args.date = params.kwargs.date;
+        return generateDisplay(args);
+    }).then(function(res) {
+        callback(null, res);
+    }).catch(function(err) {
+        callback(err, null);
+    })
+}
