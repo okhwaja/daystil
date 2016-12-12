@@ -5,7 +5,8 @@ let ipRegex = require('ip-regex'),
 
 let request = Promise.promisifyAll(require('request'));
 
-let GEO_IP_URL='http://freegeoip.net/json'
+let GEO_IP_URL = 'http://freegeoip.net/json';
+let MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 /**
 * Your function call
@@ -68,7 +69,7 @@ function generateDisplay(args) {
     let userDate = new Date();
     let destinationDate = moment.tz(date, timezoneStr).toDate();
 
-    let daysTil = Math.ceil((destinationDate - userDate) / (1000 * 60 * 60 * 24)); // ms in a day
+    let daysTil = Math.ceil((destinationDate - userDate) / MS_PER_DAY);
 
     return `Days until ${destinationDate.toDateString()}: ${daysTil}`;
 }
