@@ -16,6 +16,6 @@
     "name": "okhwaja/daystil",
     "defaultFunction": "main",
     "timeout": 10000,
-    "publish": false
+    "publish": true
   }
 }

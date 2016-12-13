@@ -96,8 +96,7 @@ function generateDisplay(args) {
 
 module.exports = (params, callback) => {
     validateInputs(params).then(function() {
-        // should be params.remoteAddress
-        return getTimeZone('2601:646:0:3135:a0ed:d0e6:b1f2:1ac7')
+        return getTimeZone(params.remoteAddress)
     }).then(function(timezoneStr) {
         var args = {};
         args.timezone = timezoneStr;
