@@ -1,15 +1,13 @@
 {
   "name": "main",
   "description": "Function",
-  "args": [
-    "First argument",
-    "Second argument"
-  ],
+  "args": [],
   "kwargs": {
-    "alpha": "Keyword argument alpha",
-    "beta": "Keyword argument beta"
+    "date": "Target date (YYYY-MM-DD)"
   },
   "http": {
-    "headers": {}
+    "headers": {
+      "Content-Type": "text/html"
+    }
   }
 }

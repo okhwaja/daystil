@@ -86,10 +86,12 @@ function generateDisplay(args) {
 
     let daysTil = Math.ceil((destinationDate - userDate) / MS_PER_DAY);
 
-    return Mustache.render(htmlTemplate, {
+    let html = Mustache.render(htmlTemplate, {
         daysStr: daysStr(daysTil),
         dateStr: dateStr(destinationDate)
     });
+
+    return new Buffer(html);
 }
 
 module.exports = (params, callback) => {
