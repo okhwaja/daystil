@@ -1,6 +1,6 @@
 {
   "name": "daystil",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simple countdown HTML page to an event",
   "author": "okhwaja <osman.khwaja@gmail.com>",
   "main": "f/main/index.js",
