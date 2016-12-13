@@ -3,7 +3,8 @@
   "description": "Function",
   "args": [],
   "kwargs": {
-    "date": "Target date (YYYY-MM-DD)"
+    "date": "Target date (YYYY-MM-DD)",
+    "eventName": "Name of the event on the date"
   },
   "http": {
     "headers": {

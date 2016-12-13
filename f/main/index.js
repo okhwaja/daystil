@@ -86,9 +86,11 @@ function generateDisplay(args) {
 
     let daysTil = Math.ceil((destinationDate - userDate) / MS_PER_DAY);
 
+    let eventStr = args.eventName || dateStr(destinationDate);
+
     let html = Mustache.render(htmlTemplate, {
         daysStr: daysStr(daysTil),
-        dateStr: dateStr(destinationDate)
+        eventStr: eventStr
     });
 
     return new Buffer(html);
@@ -96,11 +98,12 @@ function generateDisplay(args) {
 
 module.exports = (params, callback) => {
     validateInputs(params).then(function() {
-        return getTimeZone(params.remoteAddress)
+        return getTimeZone(process.env.DEV_IP || params.remoteAddress)
     }).then(function(timezoneStr) {
         var args = {};
         args.timezone = timezoneStr;
         args.date = params.kwargs.date;
+        args.eventName = params.kwargs.eventName;
         return generateDisplay(args);
     }).then(function(res) {
         callback(null, res);
